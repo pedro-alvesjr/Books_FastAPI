@@ -36,7 +36,6 @@ BOOKS = [
 ]
 
 
-
 @app.get('/books/')
 def show_all_books():
     return BOOKS
