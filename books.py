@@ -44,4 +44,5 @@ def show_all_books():
 
 @app.post('/create_book')
 def create_book(book_request: BookRequest):
+    new_book = Book(**book_request.dict())
     BOOKS.append(book_request)
