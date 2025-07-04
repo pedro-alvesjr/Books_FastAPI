@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
@@ -20,7 +21,7 @@ class Book:
 
 
 class BookRequest(BaseModel):
-    id: int
+    id: Optional[int] = None
     title: str = Field(min_length=3)
     author: str = Field(min_length=3)
     description: str = Field(min_length=1, max_length=100)
