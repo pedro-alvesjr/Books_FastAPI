@@ -48,9 +48,25 @@ BOOKS = [
 ]
 
 
-@app.get('/books/')
+@app.get('/books')
 def show_all_books():
     return BOOKS
+
+
+@app.get('/books/{book_id}')
+def find_book_by_ID(book_id: int):
+    for book in BOOKS:
+        if book.id == book_id:
+            return book
+
+
+@app.get('/books/')
+def filter_books_by_rating(book_rating: int):
+    books_to_return = {}
+    for book in BOOKS:
+        if book.rating == book_rating:
+            books_to_return.append(book)
+    return books_to_return
 
 
 @app.post('/create_book')
