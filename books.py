@@ -62,7 +62,7 @@ def find_book_by_ID(book_id: int):
 
 @app.get('/books/')
 def filter_books_by_rating(book_rating: int):
-    books_to_return = {}
+    books_to_return = []
     for book in BOOKS:
         if book.rating == book_rating:
             books_to_return.append(book)
