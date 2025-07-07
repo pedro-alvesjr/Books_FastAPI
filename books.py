@@ -11,13 +11,15 @@ class Book:
     author: str
     description: str
     rating: int
+    published_date: int
 
-    def __init__(self, id, title, author, description, rating):
+    def __init__(self, id, title, author, description, rating, published_date):
         self.id = id
         self.title = title
         self.author = author
         self.description = description
         self.rating = rating
+        self.published_date = published_date
 
 
 class BookRequest(BaseModel):
@@ -26,6 +28,7 @@ class BookRequest(BaseModel):
     author: str = Field(min_length=3)
     description: str = Field(min_length=1, max_length=100)
     rating: int = Field(gt=-1, lt=6)
+    published_date: int = Field(min_length=4, max_length=4)
 
     model_config = {
         "json_schema_extra": {
@@ -34,17 +37,18 @@ class BookRequest(BaseModel):
                 "author": "Cody",
                 "description": "A new description of a book",
                 "rating": 5,
+                "published_date": 2012
             }
         }
     }
 
 
 BOOKS = [
-    Book(1, 'Bible', 'The Holy Spirit', 'Best book of all time', 5),
-    Book(2, 'Star Wars', 'Author Two', 'Book description', 3),
-    Book(3, 'Rome, Sweet Home', 'Scott Hahn', 'Book description', 5),
-    Book(4, 'Praying', 'Author Two', 'Book description', 4),
-    Book(5, 'Path', 'Josémaria Escrivá', 'Book description', 5)
+    Book(1, 'Bible', 'The Holy Spirit', 'Best book of all time', 5, 1932),
+    Book(2, 'Star Wars', 'Author Two', 'Book description', 3, 1967),
+    Book(3, 'Rome, Sweet Home', 'Scott Hahn', 'Book description', 5, 2005),
+    Book(4, 'Praying', 'Author Two', 'Book description', 4, 2000),
+    Book(5, 'Path', 'Josémaria Escrivá', 'Book description', 5, 2019)
 ]
 
 
@@ -65,6 +69,15 @@ def filter_books_by_rating(book_rating: int):
     books_to_return = []
     for book in BOOKS:
         if book.rating == book_rating:
+            books_to_return.append(book)
+    return books_to_return
+
+
+@app.get('/books/publish/')
+def filter_books_by_published_date(published_date: int):
+    books_to_return = []
+    for book in BOOKS:
+        if book.published_date == published_date:
             books_to_return.append(book)
     return books_to_return
 
@@ -96,3 +109,4 @@ def delete_book(book_id: int):
         if BOOKS[i].id == book_id:
             BOOKS.pop(i)
             break
+
