@@ -1,5 +1,5 @@
 from typing import Optional
-from fastapi import FastAPI, Path
+from fastapi import FastAPI, Path, Query
 from pydantic import BaseModel, Field
 
 app = FastAPI()
@@ -28,7 +28,7 @@ class BookRequest(BaseModel):
     author: str = Field(min_length=3)
     description: str = Field(min_length=1, max_length=100)
     rating: int = Field(gt=-1, lt=6)
-    published_date: int = Field(min_length=4, max_length=4)
+    published_date: int = Field(gt=0, lt=2100)
 
     model_config = {
         "json_schema_extra": {
@@ -65,7 +65,7 @@ def find_book_by_ID(book_id: int = Path(gt=0)):
 
 
 @app.get('/books/')
-def filter_books_by_rating(book_rating: int):
+def filter_books_by_rating(book_rating: int = Query(gt=0, lt=6)):
     books_to_return = []
     for book in BOOKS:
         if book.rating == book_rating:
@@ -74,7 +74,7 @@ def filter_books_by_rating(book_rating: int):
 
 
 @app.get('/books/publish/')
-def filter_books_by_published_date(published_date: int):
+def filter_books_by_published_date(published_date: int = Query(gt=0, lt=2100)):
     books_to_return = []
     for book in BOOKS:
         if book.published_date == published_date:
